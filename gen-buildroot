@@ -1,0 +1,26 @@
+#!/bin/sh
+
+root=$1
+
+[ "$root" ] || exit 1
+[ -d "$root" ] || exit 1
+[ "$EUID" = "0" ] || exit 1
+
+mkdir -p "$root/var/lib/pacman"
+pacman -r "$root" -Sy --noconfirm base base-devel sudo vim
+mkdir -p "$root/home/pkg"
+
+getent passwd pkg >> "$root/etc/passwd"
+getent shadow pkg >> "$root/etc/shadow"
+getent group pkg >> "$root/etc/group"
+
+cat > "$root/etc/sudoers.d/pkg" <<EOF
+pkg ALL=(ALL) NOPASSWD: ALL
+EOF
+
+(
+cd /
+tar -cf- etc/pacman.conf etc/pacman.d |
+  (cd "$root"; tar xf -)
+)
+

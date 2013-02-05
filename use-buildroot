@@ -1,0 +1,13 @@
+#!/bin/sh
+
+root=$1
+
+[ "$root" ] || exit 1
+[ -d "$root" ] || exit 1
+[ "$EUID" = "0" ] || exit 1
+
+install -d -o pkg -g pkg "$root/home/pkg"
+mount -o bind /home/pkg "$root/home/pkg"
+systemd-nspawn -D "$root" sh -c 'chown pkg $(tty);exec su - pkg'
+umount "$root/home/pkg"
+
