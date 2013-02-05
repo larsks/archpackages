@@ -1,0 +1,68 @@
+# Maintainer: Lars Kellogg-Stedman <lars@oddbit.com>
+pkgname=binkd
+pkgver=1.0.1
+pkgrel=9
+pkgdesc="Binkley protocol daemon for transferring files between Fidonet systems"
+arch=('i686' 'x86_64')
+url="http://2f.ru/binkd/"
+license=('GPL')
+groups=('ftn')
+depends=('ftn-common')
+makedepends=('ftn-common')
+backup=("etc/binkd/binkd.conf")
+source=("ftp://happy.kiev.ua/pub/fidosoft/mailer/$pkgname/$pkgname-$pkgver.tar.gz"
+        "binkd.service"
+        "binkd@.service"
+        "binkd.socket"
+        "binkd-poll@.service"
+        "binkd.conf"
+        )
+sha1sums=('cef53e315ef9c5d761774a9cf5388c0f63b59a12'
+    '22b3e184cd9dc7504eded00954ecc6fef488e38e'
+    '27385ff3dd3faf77e8a79860d4bf5efc4172eecf'
+    '6fb4bc935010e2b068b6d50c83a30279b5f66c38'
+    '1ab9d10320ac9ac462cded72fa7c45a2f82196b3'
+    'e6509aace274f0034b002057d0a4494fc71506ed')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  cp mkfls/unix/{Makefile*,configure*,install-sh,mkinstalldirs} .
+  ./configure \
+    --prefix=/usr           \
+    --sysconfdir=/etc/binkd       \
+    --localstatedir=/var    \
+    --with-https            \
+    --with-ntlm             \
+    ;
+  touch banner # shut up post-make text
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" prefix="/usr" datarootdir="/usr/share" install
+
+  # fix absolute symlink
+  ln -sf "binkd-$pkgver" "$pkgdir/usr/sbin/binkd"
+
+  cd "$srcdir"
+  install -m 755 -d "$pkgdir/usr/lib/systemd/system"
+
+  install -m 0644 binkd.service        "$pkgdir/usr/lib/systemd/system/binkd.service"
+  install -m 0644 binkd@.service       "$pkgdir/usr/lib/systemd/system/binkd@.service"
+  install -m 0644 binkd.socket         "$pkgdir/usr/lib/systemd/system/binkd.socket"
+  install -m 0644 binkd-poll@.service  "$pkgdir/usr/lib/systemd/system/binkd-poll@.service"
+
+  install -m 755 -d "$pkgdir/etc/binkd"
+  install -m 640 binkd.conf "$pkgdir/etc/binkd/binkd.conf"
+
+	install -d -m 0750 -o ftn -g ftn "$pkgdir/var/spool/ftn"
+	install -d -m 0750 -o ftn -g ftn "$pkgdir/var/spool/ftn/outbound"
+	install -d -m 0750 -o ftn -g ftn "$pkgdir/var/spool/ftn/outbound/fidonet"
+	install -d -m 0750 -o ftn -g ftn "$pkgdir/var/spool/ftn/inbound"
+	install -d -m 0750 -o ftn -g ftn "$pkgdir/var/spool/ftn/inbound-unsecure"
+	install -d -m 0750 -o ftn -g ftn "$pkgdir/var/spool/ftn/inbound-temp"
+}
+
+# vim: ts=2:sw=2:et
+#

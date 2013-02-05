@@ -1,0 +1,11 @@
+[Unit]
+Description=Binkley Protocol server -- poll %I
+
+[Service]
+User=ftn
+Type=oneshot
+ExecStart=-/usr/sbin/binkd /etc/binkd/binkd.conf -n -P %I
+
+[Install]
+WantedBy=multi-user.target
+

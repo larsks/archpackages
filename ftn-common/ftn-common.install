@@ -1,0 +1,8 @@
+#!/bin/sh
+
+pre_install () {
+	if ! getent passwd ftn > /dev/null 2>&1; then
+		useradd -d /var/lib/ftn -m -c 'FTN User' -r ftn
+	fi
+}
+

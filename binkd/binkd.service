@@ -1,0 +1,10 @@
+[Unit]
+Description=Binkley Protocol server
+
+[Service]
+User=ftn
+ExecStart=/usr/sbin/binkd /etc/binkd/binkd.conf
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

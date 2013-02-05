@@ -1,0 +1,22 @@
+# Maintainer: Lars Kellogg-Stedman <lars@oddbit.com>
+pkgname=ftn-common
+pkgver=1
+pkgrel=1
+pkgdesc="FTN (Fidonet Technology Network) common configuration"
+arch=('any')
+license=('GPL')
+groups=('ftn')
+install='ftn-common.install'
+noextract=()
+source=('README.md')
+sha1sums=(
+'c2249f90ffa6b7fe251ca48cafd2bfaff9b63e2c'
+)
+
+package() {
+  cd "$srcdir"
+  install -m 755 -d "$pkgdir/usr/share/doc/ftn-common"
+  install -m 644 README.md "$pkgdir/usr/share/doc/ftn-common/README.md"
+}
+
+# vim:set ts=2 sw=2 et:
