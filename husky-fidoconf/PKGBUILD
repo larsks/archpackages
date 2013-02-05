@@ -19,7 +19,7 @@ optdepends=()
 provides=()
 conflicts=()
 replaces=()
-backup=()
+backup=('etc/ftn/config')
 options=()
 install=
 changelog=
@@ -37,6 +37,8 @@ build() {
 package() {
   cd "$srcdir/husky"
   make -C fidoconf DESTDIR="$pkgdir" LDCONFIG=true install install-man
+  install "$startdir/fido.config" \
+    "$pkgdir/etc/ftn/config.sample"
 }
 
 # vim:set ts=2 sw=2 et:
