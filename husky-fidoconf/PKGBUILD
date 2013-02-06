@@ -1,7 +1,7 @@
 # Maintainer: Lars Kellogg-Stedman <lars@oddbit.com>
 pkgname=husky-fidoconf
 pkgver=1.9.20110421
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="Husky FTN software configuration API"
 arch=('x86_64' 'i686')
@@ -32,6 +32,7 @@ build() {
   cd "$srcdir/husky"
   cp "$startdir/huskymak.cfg" huskymak.cfg
   make -C fidoconf
+  make -C huskybse/config en
 }
 
 package() {
@@ -40,6 +41,9 @@ package() {
   install -m 755 -d "$pkgdir/etc/ftn"
   install "$startdir/fido.config" \
     "$pkgdir/etc/ftn/config.sample"
+
+  install -m 755 -d "$pkgdir/usr/share/doc/husky-fidoconf/config"
+  cp huskybse/config/en/* "$pkgdir/usr/share/doc/husky-fidoconf/config/"
 }
 
 # vim:set ts=2 sw=2 et:
