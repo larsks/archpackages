@@ -1,0 +1,14 @@
+diff -r 5fdff160305c src/oslib_linux/os_linux.h
+--- a/src/oslib_linux/os_linux.h	Wed Jul 29 18:13:11 2009 +0200
++++ b/src/oslib_linux/os_linux.h	Wed Feb 06 17:23:43 2013 -0500
+@@ -9,7 +9,10 @@
+ #define OS_PATH_CHARS "/"
+ #define OS_CURRENT_DIR "."
+ 
++#ifndef OS_CONFIG_NAME
+ #define OS_CONFIG_NAME "crashmail.prefs"
++#endif
++
+ #define OS_CONFIG_VAR "CMCONFIGFILE"
+ 
+ #define OS_HAS_SYSLOG
