@@ -1,0 +1,25 @@
+#!/bin/sh
+
+PACKAGES='
+husky-lib
+husky-smapi
+husky-fidoconf
+husky-areafix
+husky-hpt
+husky-msged
+husky-sqpack
+husky-bsopack
+husky-htick
+husky-nltools
+'
+
+for pkg in $PACKAGES; do
+(
+	cd $pkg
+	makepkg -fs || {
+		echo "ERROR: Failed to build $pkg" >&2
+		exit 1
+	}
+)
+done
+
