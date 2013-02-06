@@ -1,0 +1,50 @@
+# Maintainer: Lars Kellogg-Stedman <lars@oddbit.com>
+pkgname=husky-sqpack
+pkgver=1.9.20110421
+pkgrel=3
+epoch=
+pkgdesc="Husky Fidonet/FTN message base packer"
+arch=('x86_64' 'i686')
+url="http://husky.sourceforge.net/sqpack.html"
+license=('GPL')
+groups=('ftn')
+depends=('ftn-common'
+  'husky-lib'
+  'husky-smapi'
+  'husky-fidoconf'
+)
+makedepends=('ftn-common'
+  'husky-lib'
+  'husky-smapi'
+  'husky-fidoconf'
+)
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source=('http://iweb.dl.sourceforge.net/project/husky/husky/1.9-current/husky-all-1.9-source-20110421.tgz')
+noextract=()
+sha1sums=('8ef6c34714fcdee4af8a26c9d09f8717025310fe')
+
+
+build() {
+  cd "$srcdir/husky"
+  cp "$startdir/huskymak.cfg" huskymak.cfg
+  make -C sqpack
+}
+
+package() {
+  cd "$srcdir/husky"
+
+  # The Makefile needs some help.
+  mkdir -p "$pkgdir/usr/bin" "$pkgdir/usr/share/man"
+  make -C sqpack DESTDIR="$pkgdir" LDCONFIG=true install
+}
+
+# vim:set ts=2 sw=2 et:
+

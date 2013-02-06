@@ -1,0 +1,52 @@
+# Maintainer: Lars Kellogg-Stedman <lars@oddbit.com>
+pkgname=husky-msged
+pkgver=1.9.20110421
+pkgrel=3
+epoch=
+pkgdesc="Husky Fidonet/FTN tosser"
+arch=('x86_64' 'i686')
+url="http://husky.sourceforge.net/msged.html"
+license=('GPL')
+groups=('ftn')
+depends=('ftn-common'
+  'husky-lib'
+  'husky-smapi'
+  'husky-fidoconf'
+)
+makedepends=('ftn-common'
+  'husky-lib'
+  'husky-smapi'
+  'husky-fidoconf'
+)
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=(etc/ftn/msged.cfg)
+options=()
+install=
+changelog=
+source=('http://iweb.dl.sourceforge.net/project/husky/husky/1.9-current/husky-all-1.9-source-20110421.tgz')
+noextract=()
+sha1sums=('8ef6c34714fcdee4af8a26c9d09f8717025310fe')
+
+
+build() {
+  cd "$srcdir/husky"
+  cp "$startdir/huskymak.cfg" huskymak.cfg
+  make -C msged
+}
+
+package() {
+  cd "$srcdir/husky"
+  make -C msged DESTDIR="$pkgdir" LDCONFIG=true \
+    BINDIR="$pkgdir/usr/bin" CFGDIR="$pkgdir/etc/ftn" \
+    install
+
+  install -m 644 huskypnt/english/msged.cfg \
+    "$pkgdir/etc/ftn/msged.cfg"
+}
+
+# vim:set ts=2 sw=2 et:
+
