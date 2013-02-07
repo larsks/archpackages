@@ -1,11 +1,11 @@
 # Maintainer: Lars Kellogg-Stedman <lars@oddbit.com>
 pkgname=crashmail
-pkgver=0.71
+pkgver=0.8
 pkgrel=5
 epoch=
 pkgdesc="Portable FTN tosser for JAM and *.MSG message bases"
 arch=('x86_64' 'i686')
-url="https://bitbucket.org/johanbilling/crashmail"
+url="https://github.com/larsks/crashmail/"
 license=('GPL')
 groups=('ftn')
 depends=('ftn-common'
@@ -21,35 +21,21 @@ backup=()
 options=()
 install=
 changelog=
-source=("https://bitbucket.org/johanbilling/crashmail/get/crashmail-${pkgver}.tar.bz2")
+source=("https://github.com/larsks/crashmail/archive/crashmail-${pkgver}.tar.gz")
 noextract=()
-sha1sums=('f789ba69159e01dbada38e591c576ebc2f526b54')
+sha1sums=('fc90528914e6697ccf4a68c04eb85b24659d7572')
 
 build() {
-  cd "$srcdir/johanbilling-crashmail-5eed3660be52"
-  patch -p1 < "$startdir/cflags.patch"
-  patch -p1 < "$startdir/config.patch"
-  patch -p1 < "$startdir/logwrite.patch"
-  mkdir -p bin src/obj
-  make -C src linux \
-    CFLAGS=-Wno-pointer-sign \
-    OS_CONFIG_NAME=/etc/ftn/crashmail.prefs
+  cd "$srcdir/crashmail-crashmail-${pkgver}"
+  make
 }
 
 package() {
-  cd "$srcdir/johanbilling-crashmail-5eed3660be52"
-
-  install -d -m 755 "$pkgdir/usr/share/man/man1" \
-    "$pkgdir/usr/bin" \
-    "$pkgdir/usr/share/doc/crashmail"
-
-  install -m 755 bin/* "$pkgdir/usr/bin/"
-  install -m 644 man/*.1 "$pkgdir/usr/share/man/man1/"
+  cd "$srcdir/crashmail-crashmail-${pkgver}"
+  make DESTDIR="$pkgdir" install
+  install -m 755 -d "$pkgdir/usr/share/doc/crashmail/"
   install -m 644 doc/* "$pkgdir/usr/share/doc/crashmail/"
-
-  install -d -m 775 -g ftn "$pkgdir/etc/ftn"
-  install -m 644 doc/example.prefs "$pkgdir/etc/ftn/crashmail.prefs.example"
-
+  install -D -m 644 doc/example.prefs "$pkgdir/etc/ftn/crashmail.prefs.example"
 }
 
 # vim:set ts=2 sw=2 et:
