@@ -1,6 +1,6 @@
 # Maintainer: Lars Kellogg-Stedman <lars@oddbit.com>
 pkgname=crashmail
-pkgver=0.84
+pkgver=0.86
 pkgrel=5
 epoch=
 pkgdesc="Portable FTN tosser for JAM and *.MSG message bases"
@@ -23,7 +23,7 @@ install=
 changelog=
 source=("https://github.com/larsks/crashmail/archive/crashmail-${pkgver}.tar.gz")
 noextract=()
-sha1sums=('758d23105982d5d07430957df172f53aa8a109cf')
+sha1sums=('f3ce5e0fe2a24dc8b2526edd8e0fa270b06a730c')
 
 build() {
   cd "$srcdir/crashmail-crashmail-${pkgver}"
