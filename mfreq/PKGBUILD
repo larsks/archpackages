@@ -1,0 +1,42 @@
+# Maintainer: Lars Kellogg-Stedman <lars@oddbit.com>
+pkgname=mfreq
+pkgver=3.06.lks.1
+pkgrel=3
+epoch=
+pkgdesc="mfreq is a suite of tools for FTS style file requesting."
+arch=('x86_64' 'i686')
+url="https://github.com/larsks/mfreq/"
+license=('EUPL')
+groups=('ftn')
+depends=('ftn-common'
+)
+makedepends=('ftn-common'
+)
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source=("https://github.com/larsks/mfreq/archive/${pkgver}.tar.gz")
+noextract=()
+sha1sums=('dec13f3805be1995d844400f8c442fc8ec0200c7')
+
+build() {
+  cd "$srcdir/mfreq-${pkgver}"
+  make sysconfdir=/etc/ftn/mfreq prefix=/usr
+}
+
+package() {
+  cd "$srcdir/mfreq-${pkgver}"
+  make DESTDIR="$pkgdir" sysconfdir=/etc/ftn/mfreq prefix=/usr install
+  install -m 755 -d "$pkgdir/usr/share/doc/mfreq/"
+  install -m 644 README "$pkgdir/usr/share/doc/mfreq/"
+  cp -r sample-cfg/ "$pkgdir/usr/share/doc/mfreq/"
+}
+
+# vim:set ts=2 sw=2 et:
+
