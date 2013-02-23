@@ -1,0 +1,66 @@
+# Maintainer: Lars Kellogg-Stedman <lars@oddbit.com>
+pkgname=golded+
+pkgver=115.20130111
+pkgrel=4
+epoch=
+pkgdesc="Fidonet compatible mail reader"
+arch=('x86_64' 'i686')
+url="http://golded-plus.sourceforge.net/"
+license=('EUPL')
+groups=('ftn')
+depends=('ftn-common'
+)
+makedepends=('ftn-common'
+)
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source=(
+  "http://sourceforge.net/projects/golded-plus/files/Golded%2B%201.1.5%20snapshots/2013.01.11/gpsrc-115-20130111.tgz/download"
+  "mygolded.h"
+  "GNUmakef.def"
+)
+noextract=()
+
+sha1sums=('54b3652799cda02d1fe03ce3178fdb30e084a1ee'
+          '9ef0a5413b3b0acd87e3cc817f37a77f7d466686'
+          'bc9c0691b43fccf0278374deaa5f3aafea026645')
+
+build() {
+  cp mygolded.h "$srcdir/golded-plus/golded+/golded3/"
+  cp GNUmakef.def "$srcdir/golded-plus/golded+/"
+  cd "$srcdir/golded-plus/golded+"
+  make
+}
+
+package() {
+  cd "$srcdir/golded-plus/golded+"
+  install -m 755 -d "$pkgdir/usr/bin"
+  install -m 755 bin/*lnx bin/golded "$pkgdir/usr/bin/"
+
+  install -d "$pkgdir/usr/man/man1"
+  install -m 644 docs/*.1 "$pkgdir/usr/man/man1/"
+  ln $pkgdir/usr/man/man1/golded.1 $pkgdir/usr/man/man1/gedlnx.1
+  ln $pkgdir/usr/man/man1/goldnode.1 $pkgdir/usr/man/man1/gnlnx.1
+  ln $pkgdir/usr/man/man1/rddt.1 $pkgdir/usr/man/man1/rddtlnx.1
+
+  install -d $pkgdir/usr/share/doc/golded+
+  install -d $pkgdir/usr/share/doc/golded+/examples
+  install -m 644 bin/openbsd-vt220.sh $pkgdir/usr/share/doc/golded+/examples/
+  cp -r cfgs/config $pkgdir/usr/share/doc/golded+/examples/
+  cp -r cfgs/template $pkgdir/usr/share/doc/golded+/examples/
+  cp manuals/*.txt $pkgdir/usr/share/doc/golded+
+
+  install -d $pkgdir/usr/share/golded+/
+  cp -r cfgs/charset $pkgdir/usr/share/golded+/
+  cp -r cfgs/colorset $pkgdir/usr/share/golded+/
+}
+
+# vim:set ts=2 sw=2 et:
+
